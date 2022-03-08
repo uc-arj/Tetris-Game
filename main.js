@@ -68,7 +68,7 @@ function randomColor(){
 }
 //Random number function
 function randomNumber(){
-  let r=Math.floor(Math.random()*3)
+  let r=1
   return r;
 }
 //level down function
