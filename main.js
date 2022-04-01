@@ -1,44 +1,44 @@
-const canvas = document.getElementById('tetris');
-const ctx = canvas.getContext('2d');
+const CANVAS = document.getElementById('tetris');
+const CTX = CANVAS.getContext('2d');
 
 //level button
-const level_up_btn = document.getElementById("increment");
-const level_down_btn = document.getElementById("decrement");
+const LEVELUP_BTN = document.getElementById("increment");
+const LEVELDOWN_BTN = document.getElementById("decrement");
 //buttons
-const left_btn = document.querySelector("#leftarrow");
-const right_btn = document.querySelector("#rightarrow");
-const down_btn = document.querySelector("#downarrow");
+const LEFT_BTN = document.querySelector("#leftarrow");
+const RIGHT_BTN = document.querySelector("#rightarrow");
+const DOWN_BTN = document.querySelector("#downarrow");
 //help button
 
-const leftmovekey_code = 37;
-const rightmovekey_code = 39;
-const downmovekey_code = 40;
-const levelupkey_code = 187;
-const leveldownkey_code = 189;
-const helpkey_code = 191;
-const increase = 10;
-const help_btn = document.querySelector("#help");
+const LEFTMOVEKEY_CODE = 37;
+const RIGHTMOVEKEY_CODE = 39;
+const DOWNMOVEKEY_CODE = 40;
+const LEVELUP_MOVEKEY = 187;
+const LEVELDOWN_MOVEKEY = 189;
+const HELPKEY_CODE = 191;
+const INCREASE = 10;
+const HELP_BTN = document.querySelector("#help");
 //Variable for game
-let game_score = 0;   //set game_score=0
+const ROW = 12;    // let ROW= 12
+const COL = 3; //let COLumn=3
+const BALL_SIZE = 46;  //ball Size
+const SPACE = "WHITE"; //Vacant SPACE which shows grid SPACE
+const RADIUS = 23;  //Ball RADIUS
+const COLORS = ["Purple", "green", "yellow", "Blue","red"]//Random Ball COLORS 
 let game_level = 1;   //set game_level=1
-const row = 12;    // let row= 12
-const col = 3; //let column=3
-const ball_size = 46;  //ball Size
-const space = "WHITE"; //Vacant space which shows grid space
-const radius = 23;  //Ball radius
+let game_score = 0;   //set game_score=0
 let level = 1;
 let down_start = Date.now();// Getting date Variable     
-const colors = ["Purple", "green", "yellow", "Blue"]//Random Ball color 
 
-//Draw Ball Code using X,Y cordinate and color
+//Draw Ball Code using X,Y cordinate and COLORS
 
-function drawBall(x, y, color) {
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.arc((x + 0.5) * ball_size, (y + 0.5) * ball_size, radius, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = "White";
-  ctx.stroke();
+function drawBall(x, y, COLORS) {
+  CTX.fillStyle = COLORS;
+  CTX.beginPath();
+  CTX.arc((x + 0.5) * BALL_SIZE, (y + 0.5) * BALL_SIZE, RADIUS, 0, Math.PI * 2);
+  CTX.fill();
+  CTX.strokeStyle = "White";
+  CTX.stroke();
 }
 // init();
 
@@ -48,30 +48,30 @@ function scoreUpdater() {
   let score = document.querySelector("#score");
   let scorevalue = Number(score.value);
   console.log(scorevalue)
-  score.value = scorevalue + increase;
-  game_score = scorevalue + increase;
+  score.value = scorevalue + INCREASE;
+  game_score = scorevalue + INCREASE;
 }
 
 //grid Pattern Making
 let grid = [];
-for (r = 0; r < row; r++) {
+for (r = 0; r < ROW; r++) {
   grid[r] = [];
-  for (c = 0; c < col; c++) {
-    grid[r][c] = space;
+  for (c = 0; c < COL; c++) {
+    grid[r][c] = SPACE;
   }
 }
 
 function gridPattern() { //Function for grid
-  for (r = 0; r < row; r++) {
-    for (c = 0; c < col; c++) {
+  for (r = 0; r < ROW; r++) {
+    for (c = 0; c < COL; c++) {
       drawBall(c, r, grid[r][c]);
     }
   }
 }
-//Random ball color Function
-function randomColor() {
-  let r = Math.floor(Math.random() * colors.length)
-  return colors[r]
+//Random ball COLORS Function
+function randomCOLORS() {
+  let r = Math.floor(Math.random() * COLORS.length)
+  return COLORS[r]
 }
 
 //level down function
@@ -107,20 +107,20 @@ let ball = new generateBall();
 function Ball() {
   this.x = 1;
   this.y = -1;
-  this.color = randomColor();
+  this.COLORS = randomCOLORS();
 }
 //Ball function Draw
 Ball.prototype.draw = function () {
-  drawBall(this.x, this.y, this.color);
+  drawBall(this.x, this.y, this.COLORS);
 }
 ball.draw();
 
 // Button Moves  function
 Ball.prototype.moveDown = function () {
-  if (!this.colliod(0, 1)) {
-    drawBall(this.x, this.y, space);
+  if (!this.COLliod(0, 1)) {
+    drawBall(this.x, this.y, SPACE);
     this.y++
-    drawBall(this.x, this.y, this.color);
+    drawBall(this.x, this.y, this.COLORS);
   }
   else {
     ball.jam();
@@ -128,37 +128,33 @@ Ball.prototype.moveDown = function () {
   }
 }
 Ball.prototype.moveRight = function () {
-  if (!this.colliod(1, 0)) {
-    drawBall(this.x, this.y, space);
+  if (!this.COLliod(1, 0)) {
+    drawBall(this.x, this.y, SPACE);
     this.x++
-    drawBall(this.x, this.y, this.color)
+    drawBall(this.x, this.y, this.COLORS)
   }
 }
 Ball.prototype.moveLeft = function () {
-  if (!this.colliod(-1, 0)) {
-    drawBall(this.x, this.y, space);
+  if (!this.COLliod(-1, 0)) {
+    drawBall(this.x, this.y, SPACE);
     this.x--
-    drawBall(this.x, this.y, this.color)
+    drawBall(this.x, this.y, this.COLORS)
   }
 }
-// colliod function for New Ball
-Ball.prototype.colliod = function (x, y) {
+// COLliod function for New Ball
+Ball.prototype.COLliod = function (x, y) {
   let xcore = this.x + x;
   let ycore = this.y + y;
 
 
   //Condition for Left Right and Last Location
-  if (xcore < 0 || xcore >= col || ycore >= row || (ycore < 0)) {
-    return true;
-  }
-
-  else if (grid[ycore][xcore] != space) {
+  if (xcore < 0 || xcore >= COL || ycore >= ROW || (ycore < 0)||(grid[ycore][xcore] != SPACE)) {
     return true;
   }
 
   return false;
 }
-// ball collapse and lock function
+// ball COLlapse and lock function
 //Jam function for Match Making vertical and Horizonatal and game over alert
 Ball.prototype.jam = function () {
   if (this.y < 0) {
@@ -167,30 +163,30 @@ Ball.prototype.jam = function () {
     location.reload();
   }
   else {
-    // Define the grid to the Implement Color on the X and Y
-    // If any color found than stop on another
-    grid[this.y][this.x] = this.color
+    // Define the grid to the Implement COLORS on the X and Y
+    // If any COLORS found than stop on another
+    grid[this.y][this.x] = this.COLORS
     // If grid is vacant then score not Update
-    if (grid[this.y][this.x] != space) {
+    if (grid[this.y][this.x] != SPACE) {
       if (this.y < 10) {
         if (grid[this.y][this.x] == grid[this.y + 1][this.x] && grid[this.y + 1][this.x] == grid[this.y + 2][this.x]) {
-          grid[this.y][this.x] = grid[this.y + 1][this.x] = grid[this.y + 2][this.x] = space;
-          drawBall(this.x, this.y, space);
-          drawBall(this.x, this.y + 1, space);
-          drawBall(this.x, this.y + 2, space);
+          grid[this.y][this.x] = grid[this.y + 1][this.x] = grid[this.y + 2][this.x] = SPACE;
+          drawBall(this.x, this.y, SPACE);
+          drawBall(this.x, this.y + 1, SPACE);
+          drawBall(this.x, this.y + 2, SPACE);
 
           scoreUpdater();
         }
       }
     }
     //If grid is not vacant is true then score will update 
-    if (grid[this.y][this.x] != space) {
+    if (grid[this.y][this.x] != SPACE) {
       if (grid[this.y][0] == grid[this.y][1] && grid[this.y][1] == grid[this.y][2]) {
-        grid[this.y][0] = grid[this.y][1] = grid[this.y][2] = space;
+        grid[this.y][0] = grid[this.y][1] = grid[this.y][2] = SPACE;
 
         // this loop for update the grid and shift the ball to the down  
         for (i = this.y; i > 0; i--) {
-          for (r = 0; r < col; r++) {
+          for (r = 0; r < COL; r++) {
             grid[i][r] = grid[i - 1][r];
             drawBall(r, i, grid[i][r]);
           }
@@ -217,37 +213,37 @@ function down() {
 }
 // Generate new ball Randomly
 function generateBall() {
-  let random = Math.floor(Math.random() * colors.length)
-  return new Ball(Math.floor(Math.random() * 5), 0, colors[random])
+  let random = Math.floor(Math.random() * COLORS.length)
+  return new Ball(Math.floor(Math.random() * 5), 0, COLORS[random])
 }
 down();
 
 //  key button controller
 document.addEventListener("keydown", controller);
 function controller() {
-  if (event.keyCode == leftmovekey_code) {
+  if (event.keyCode == LEFTMOVEKEY_CODE) {
     ball.moveLeft();
     down_start = Date.now();
-    left_btn.focus();
-  } else if (event.keyCode == rightmovekey_code) {
+    LEFT_BTN.focus();
+  } else if (event.keyCode == RIGHTMOVEKEY_CODE) {
     ball.moveRight();
     down_start = Date.now();
-    right_btn.focus();
-  } else if (event.keyCode == downmovekey_code) {
+    RIGHT_BTN.focus();
+  } else if (event.keyCode == DOWNMOVEKEY_CODE) {
     ball.moveDown();
     down_start = Date.now();
-    down_btn.focus();
+    DOWN_BTN.focus();
   }
-  else if (event.keyCode == levelupkey_code) {
+  else if (event.keyCode == LEVELUP_MOVEKEY) {
     levelUp();
-    level_up_btn.focus();
-  } else if (event.keyCode == leveldownkey_code) {
+    LEVELUP_BTN.focus();
+  } else if (event.keyCode == LEVELDOWN_MOVEKEY) {
     levelDown();
-    level_down_btn.focus();
+    LEVELDOWN_BTN.focus();
   }
-  else if (event.keyCode == helpkey_code) {
+  else if (event.keyCode == HELPKEY_CODE) {
     help()
-    help_btn.focus();
+    HELP_BTN.focus();
   }
 }
 
@@ -262,25 +258,25 @@ function help() { //help function
 
 //level controller init
 function init() {
-  level_down_btn.addEventListener("click", levelDown);
-  level_up_btn.addEventListener("click", levelUp);
-  help_btn.addEventListener("click", help);
+  LEVELDOWN_BTN.addEventListener("click", levelDown);
+  LEVELUP_BTN.addEventListener("click", levelUp);
+  HELP_BTN.addEventListener("click", help);
 
   //Control button Function
-  left_btn.addEventListener("click", function () {
+  LEFT_BTN.addEventListener("click", function () {
     ball.moveLeft()
     down_start = Date.now();
-    left_btn.focus();
+    LEFT_BTN.focus();
   })
-  right_btn.addEventListener("click", function () {
+  RIGHT_BTN.addEventListener("click", function () {
     ball.moveRight();
     down_start = Date.now();
-    right_btn.focus();
+    RIGHT_BTN.focus();
   });
-  down_btn.addEventListener("click", function () {
+  DOWN_BTN.addEventListener("click", function () {
     ball.moveDown();
     down_start = Date.now();
-    down_btn.focus();
+    DOWN_BTN.focus();
   });
 }
 
